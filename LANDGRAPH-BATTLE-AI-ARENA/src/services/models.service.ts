@@ -5,12 +5,12 @@ import config from "../config/config.js";
 
 
 
-const geminiModel = new ChatGoogle({
+export const geminiModel = new ChatGoogle({
     model: "gemini-flash-latest",
     apiKey: config.GOOGLE_API_KEY
 })
 
-const mistralModel = new ChatMistralAI({
+export const mistralModel = new ChatMistralAI({
     model: "mistral-medium-latest",
     apiKey: config.MISTRAL_API_KEY
 })
