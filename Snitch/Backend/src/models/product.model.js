@@ -6,15 +6,18 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+
     description: {
         type: String,
         required: true
     },
+
     seller: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',    
         required: true
     },
+
     price: {
         amount: {
             type: Number,
@@ -26,12 +29,46 @@ const productSchema = new mongoose.Schema({
             default: "INR"
         }
     },
+
     images: [
         {
             url: {
                 type: String,
                 required: true
             }
+        }
+    ],
+
+    variants: [
+        {
+            images: [
+                {
+                    url: {
+                        type: String,
+                        required: true
+                    }
+                }
+            ],
+            stock: {
+                type: Number,
+                default: 0
+            },
+            atributes: {
+                type: Map,
+                of: String
+            },
+            price: {
+                amount: {
+                    type: Number,
+                    require: true
+                },
+                currency: {
+                    type: String,
+                    enum: [ "USD", "EUR", "GBP", "JPY", "INR"],
+                    default: "INR"
+                }
+            }
+
         }
     ]
 }, { timestamps: true })
