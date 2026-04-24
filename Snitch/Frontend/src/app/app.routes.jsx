@@ -10,13 +10,15 @@ import Protected from "../features/auth/components/Protected";
 import Home from "../features/product/pages/Home";
 import ProductDetail from "../features/product/pages/ProductDetail";
 import SellerProductDetails from "../features/product/pages/SellerProductDetails";
+import Cart from "../features/cart/pages/Cart.jsx"
+import AppLayout from "./AppLayout"
 
 
 export const routes = createBrowserRouter([
-    {
-        path: "/",
-        element: <Home />
-    },
+    // {
+    //     path: "/",
+    //     element: <Home />
+    // },
     {
         path: "/register",
         element: <Register />,
@@ -25,30 +27,77 @@ export const routes = createBrowserRouter([
         path: "/login",
         element: <Login />,
     },
-    {
-        path: "/product/:product",
-        element: <ProductDetail />
-    },
-    {
-        path: "/seller",
+     {
+        element: <AppLayout />,
         children: [
             {
-                path:"/seller/create-product",
-                element: <Protected role="seller"><CreateProduct/></Protected>
+                path: "/",
+                element: <Home />,
             },
             {
-                path: "/seller/dashboard",
-                element: <Protected role="seller" >
-                    <Dashboard />
-                </Protected>
+                path: "/product/:productId",
+                element: <ProductDetail />
             },
             {
-                path: "/seller/product/:productId",
-                element: <Protected role="seller" >
-                    <SellerProductDetails/>
-                </Protected>
+                path: "/cart",
+                element: <Protected> <Cart /></Protected>
+            },
+            {
+                path: "/seller",
+                children: [
+                    {
+                        path: "/seller/create-product",
+
+                        element: <Protected role="seller" >
+                            <CreateProduct />
+                        </Protected>
+                    },
+                    {
+                        path: "/seller/dashboard",
+                        element: <Protected role="seller" >
+                            <Dashboard />
+                        </Protected>
+                    },
+                    {
+                        path: "/seller/product/:productId",
+                        element: <Protected role="seller" >
+                            <SellerProductDetails />
+                        </Protected>
+                    }
+                ]
             }
         ]
     }
 
+
 ])
+//     {
+//         path: "/product/:productId",
+//         element: <ProductDetail />
+//     },
+//     {
+//         path: "/cart",
+//         element:<Protected><Cart /></Protected>
+//     },
+//     {
+//         path: "/seller",
+//         children: [
+//             {
+//                 path:"/seller/create-product",
+//                 element: <Protected role="seller"><CreateProduct/></Protected>
+//             },
+//             {
+//                 path: "/seller/dashboard",
+//                 element: <Protected role="seller" >
+//                     <Dashboard />
+//                 </Protected>
+//             },
+//             {
+//                 path: "/seller/product/:productId",
+//                 element: <Protected role="seller" >
+//                     <SellerProductDetails/>
+//                 </Protected>
+//             }
+//         ]
+//     }
+

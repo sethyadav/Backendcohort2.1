@@ -11,8 +11,8 @@ const productSlice = createSlice({
         setSellerProducts: (state, action) => {
             state.sellerProducts = action.payload
         },
-        setProduct: (slice, action) => {
-            state.product = action.payload
+        setProducts: (state, action) => {
+            state.products = action.payload
         }
     }
 })

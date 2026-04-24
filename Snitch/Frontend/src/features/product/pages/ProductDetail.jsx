@@ -40,6 +40,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
 import { useProduct } from '../hooks/useProduct';
+import { useCart } from '../../cart/hook/useCart';
+
 
 const ProductDetail = () => {
     const { productId } = useParams();
@@ -47,40 +49,80 @@ const ProductDetail = () => {
     const [ selectedImage, setSelectedImage ] = useState(0);
     const [ selectedAttributes, setSelectedAttributes ] = useState({});
     const navigate = useNavigate();
-    // const { handleGetProductById } = useProduct();
+    const { handleGetProductById } = useProduct();
+    const { handleAddItem } =useCart()
 
-    // async function fetchProductDetails() {
-    //     try {
-    //         const data = await handleGetProductById(productId);
-    //         // Handle both cases depending on how API is structured
-    //         setProduct(data?.product || data);
-    //     } catch (error) {
-    //         console.error("Failed to fetch product details", error);
-    //     }
-    // }
+    async function fetchProductDetails() {
+        try {
+            const data = await handleGetProductById(productId);
+            // Handle both cases depending on how API is structured
+            setProduct(data?.product || data);
+        } catch (error) {
+            console.error("Failed to fetch product details", error);
+        }
+    }
 
-    // useEffect(() => {
-    //     fetchProductDetails();
-    // }, [ productId ]);
+    useEffect(() => {
+        fetchProductDetails();
+    }, [ productId ]);
 
     useEffect(() => {
         if (product?.variants?.length > 0) {
+            const firstVariant = product.variants[0];
             setSelectedAttributes(product.variants[0].attributes || {});
         }
     }, [ product ]);
 
-    const activeVariant = useMemo(() => {
-        if (!product?.variants || product.variants.length === 0) return null;
-        return product.variants.find(v => {
-            if (!v.attributes) return false;
-            const vKeys = Object.keys(v.attributes);
-            const sKeys = Object.keys(selectedAttributes);
-            const isMatch = vKeys.every(k => v.attributes[k] === selectedAttributes[k]);
-            // If they don't have exactly the same keys, they shouldn't perfectly match, 
-            // but we might only care about matching what's available.
-            return vKeys.length === sKeys.length && isMatch;
-        });
-    }, [product, selectedAttributes]);
+    // const activeVariant = useMemo(() => {
+    //     if (!product?.variants || product.variants.length === 0) return null;
+    //     return product.variants.find(v => {
+    //         if (!v.attributes) return false;
+    //         const vKeys = Object.keys(v.attributes);
+    //         const sKeys = Object.keys(selectedAttributes);
+    //         const isMatch = vKeys.every(k => v.attributes[k] === selectedAttributes[k]);
+    //         // If they don't have exactly the same keys, they shouldn't perfectly match, 
+    //         // but we might only care about matching what's available.
+    //         return vKeys.length === sKeys.length && isMatch;
+    //     });
+    // }, [product, selectedAttributes]);
+
+
+
+//     const activeVariant = useMemo(() => {
+//          if (!product?.variants?.length) return null;
+
+//         return product.variants.find(v => {
+//              if (!v.attributes) return false;
+
+//              return Object.entries(selectedAttributes).every(
+//                  ([key, value]) => v.attributes[key] === value
+//             );
+//     }) || null;
+
+// }, [product, selectedAttributes]);
+
+const activeVariant = useMemo(() => {
+    if (!product?.variants?.length) return null;
+
+    // 👉 agar attributes hi nahi hai → first variant use karo
+    if (!selectedAttributes || Object.keys(selectedAttributes).length === 0) {
+        return product.variants[0];
+    }
+
+    return product.variants.find(v => {
+        if (!v.attributes) return false;
+
+        return Object.entries(selectedAttributes).every(
+            ([key, value]) => v.attributes[key] === value
+        );
+    }) || product.variants[0]; // 👈 fallback
+
+}, [product, selectedAttributes]);
+
+
+
+    console.log({ product, activeVariant })
+
 
     const availableAttributes = useMemo(() => {
         if (!product?.variants) return {};
@@ -136,7 +178,8 @@ const ProductDetail = () => {
         );
     }
 
-    console.log(product)
+    //console.log(product)
+    console.log("variants:", product?.variants);
     
     // Fallbacks
     const displayImages = (activeVariant?.images && activeVariant.images.length > 0) 
@@ -159,7 +202,7 @@ const ProductDetail = () => {
                 className="min-h-screen selection:bg-[#C9A96E]/30 pb-24"
                 style={{ backgroundColor: '#fbf9f6', fontFamily: "'Inter', sans-serif" }}
             >
-                {/* ── Navbar ── */}
+                {/* ── Navbar ──
                 <nav className="px-8 lg:px-16 xl:px-24 pt-10 pb-6 flex items-center justify-between border-b" style={{ borderColor: '#e4e2df' }}>
                     <Link to="/"
                         className="text-sm font-medium tracking-[0.35em] uppercase hover:opacity-80 transition-opacity"
@@ -174,7 +217,7 @@ const ProductDetail = () => {
                     >
                         Return to Archive
                     </button>
-                </nav>
+                </nav> */}
 
                 <div className="max-w-7xl mx-auto px-8 lg:px-16 xl:px-24 pt-12 lg:pt-20">
                     <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">
@@ -314,6 +357,32 @@ const ProductDetail = () => {
                                     onMouseLeave={e => {
                                         e.currentTarget.style.backgroundColor = '#1b1c1a';
                                         e.currentTarget.style.color = '#fbf9f6';
+                                    }}
+
+                                    // onClick={() => {
+                                    //     handleAddItem({
+                                    //         productId: product._id,
+                                    //         variantId: activeVariant._id
+                                    //     })
+                                    // }}
+                                    onClick={() => {
+                                        console.log("Clicked");
+                                        console.log("product:", product);
+                                        console.log("activeVariant:", activeVariant);
+
+                                       if (!product) {
+                                            console.log("❌ product is null");
+                                            return;
+                                        }
+
+                                        if (!activeVariant) {
+                                             console.log("❌ activeVariant is null");
+                                             return;
+                                        }
+                                        handleAddItem({
+                                            productId: product._id,
+                                            variantId: activeVariant._id
+                                        })
                                     }}
                                 >
                                     Add to Cart
