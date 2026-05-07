@@ -24,7 +24,7 @@ export async function createProduct(req, res) {
         },
         images,
         seller: seller._id,
-        variants: []
+        //variants: []
     })
 
 
@@ -62,7 +62,7 @@ export async function getProductDetails(req,res) {
     const { id } = req.params;
 
     const product = await productModel.findById(id)
-    console.log("PRODUCT FROM DB:", product); 
+    // console.log("PRODUCT FROM DB:", product); 
 
     if (!product) {
         return res.status(404).json({
@@ -95,21 +95,33 @@ export async function addProductVariant(req, res) {
     }
 
 
-    const files = req.files?.images || [];
+    //const files = req.files?.images || [];
+    const files = req.files || [];
+
+    //let images = [];
+    // const images = [];
+
+    // if (files.length > 0) {
+    //    images = await Promise.all(
+    //        files.map(async (file) => {
+    //           return await uploadFile({
+    //               buffer: file.buffer,
+    //               fileName: file.originalname
+    //             });
+    //         })
+    //     );
+    // }
 
     let images = [];
-
-    if (files.length > 0) {
-       images = await Promise.all(
-           files.map(async (file) => {
-              return await uploadFile({
-                  buffer: file.buffer,
-                  fileName: file.originalname
-                });
+    if (files || files.length > 0) {
+        (await Promise.all(files.map(async (file) => {
+            const image = await uploadFile({
+                buffer: file.buffer,
+                fileName: file.originalname
             })
-        );
+            return image
+        }))).map(image => images.push(image))
     }
-
     
 
     const price = req.body.priceAmount

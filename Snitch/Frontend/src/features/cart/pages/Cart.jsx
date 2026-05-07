@@ -1,660 +1,3 @@
-// import React, { useEffect, useState } from 'react'
-// import { useSelector } from 'react-redux'
-// import { useCart } from '../hook/useCart'
-// import { useNavigate } from 'react-router-dom'
-
-// /* ─── Google Font ─────────────────────────────────────────────────────────── */
-// const fontLink = document.createElement('link')
-// fontLink.href = 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap'
-// fontLink.rel = 'stylesheet'
-// document.head.appendChild(fontLink)
-
-// /* ─── Inline styles (Gilded Noir design system) ──────────────────────────── */
-// const styles = {
-//   page: {
-//     minHeight: '100vh',
-//     background: '#131313',
-//     fontFamily: "'Manrope', sans-serif",
-//     color: '#e5e2e1',
-//     paddingBottom: '120px',
-//   },
-//   header: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'space-between',
-//     padding: '20px 24px 16px',
-//     background: 'rgba(53,53,52,0.6)',
-//     backdropFilter: 'blur(24px)',
-//     WebkitBackdropFilter: 'blur(24px)',
-//     position: 'sticky',
-//     top: 0,
-//     zIndex: 10,
-//   },
-//   backBtn: {
-//     background: '#2a2a2a',
-//     border: 'none',
-//     borderRadius: '50%',
-//     width: 40,
-//     height: 40,
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     cursor: 'pointer',
-//     color: '#e5e2e1',
-//     fontSize: 18,
-//     transition: 'background 0.2s',
-//   },
-//   headerTitle: {
-//     fontSize: '1.25rem',
-//     fontWeight: 700,
-//     letterSpacing: '-0.01em',
-//     color: '#e5e2e1',
-//     margin: 0,
-//   },
-//   badge: {
-//     background: '#ffc107',
-//     color: '#3f2e00',
-//     borderRadius: '999px',
-//     fontSize: '0.7rem',
-//     fontWeight: 700,
-//     padding: '3px 10px',
-//     letterSpacing: '0.05em',
-//   },
-//   section: {
-//     padding: '8px 0',
-//   },
-//   sectionTitle: {
-//     fontSize: '0.7rem',
-//     fontWeight: 700,
-//     letterSpacing: '0.12em',
-//     color: '#d4c5ab',
-//     textTransform: 'uppercase',
-//     padding: '24px 24px 12px',
-//     margin: 0,
-//   },
-//   cartCard: {
-//     background: '#1c1b1b',
-//     borderRadius: '16px',
-//     margin: '0 16px 12px',
-//     padding: '16px',
-//     display: 'flex',
-//     gap: '14px',
-//     boxShadow: '0 8px 40px 0 rgba(250,189,0,0.04)',
-//     position: 'relative',
-//   },
-//   productImg: {
-//     width: 88,
-//     height: 108,
-//     borderRadius: '12px',
-//     objectFit: 'cover',
-//     flexShrink: 0,
-//     background: '#2a2a2a',
-//   },
-//   productImgFallback: {
-//     width: 88,
-//     height: 108,
-//     borderRadius: '12px',
-//     background: 'linear-gradient(135deg, #2a2a2a 0%, #353534 100%)',
-//     flexShrink: 0,
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     fontSize: 28,
-//   },
-//   cardInfo: {
-//     flex: 1,
-//     display: 'flex',
-//     flexDirection: 'column',
-//     gap: 6,
-//     minWidth: 0,
-//   },
-//   productName: {
-//     fontSize: '1rem',
-//     fontWeight: 700,
-//     color: '#e5e2e1',
-//     margin: 0,
-//     whiteSpace: 'nowrap',
-//     overflow: 'hidden',
-//     textOverflow: 'ellipsis',
-//   },
-//   productDesc: {
-//     fontSize: '0.75rem',
-//     color: '#d4c5ab',
-//     margin: 0,
-//     lineHeight: 1.4,
-//   },
-//   variantChip: {
-//     display: 'inline-block',
-//     background: '#353534',
-//     color: '#d4c5ab',
-//     borderRadius: '6px',
-//     fontSize: '0.65rem',
-//     fontWeight: 600,
-//     padding: '3px 8px',
-//     letterSpacing: '0.06em',
-//     textTransform: 'uppercase',
-//     width: 'fit-content',
-//   },
-//   priceRow: {
-//     display: 'flex',
-//     alignItems: 'baseline',
-//     gap: 8,
-//     marginTop: 2,
-//   },
-//   priceMain: {
-//     fontSize: '1rem',
-//     fontWeight: 800,
-//     color: '#ffe4af',
-//   },
-//   priceOriginal: {
-//     fontSize: '0.78rem',
-//     color: '#9c8f78',
-//     textDecoration: 'line-through',
-//   },
-//   quantityStepper: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     gap: 0,
-//     background: '#2a2a2a',
-//     borderRadius: '10px',
-//     overflow: 'hidden',
-//     alignSelf: 'flex-start',
-//     marginTop: 4,
-//   },
-//   stepperBtn: {
-//     background: 'transparent',
-//     border: 'none',
-//     color: '#ffe4af',
-//     fontSize: '1.05rem',
-//     fontWeight: 700,
-//     width: 34,
-//     height: 32,
-//     cursor: 'pointer',
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     transition: 'background 0.15s',
-//   },
-//   stepperCount: {
-//     fontSize: '0.85rem',
-//     fontWeight: 700,
-//     color: '#e5e2e1',
-//     minWidth: 28,
-//     textAlign: 'center',
-//   },
-//   deleteBtn: {
-//     position: 'absolute',
-//     top: 14,
-//     right: 14,
-//     background: 'transparent',
-//     border: 'none',
-//     color: '#9c8f78',
-//     fontSize: 16,
-//     cursor: 'pointer',
-//     padding: 4,
-//     borderRadius: 6,
-//     transition: 'color 0.2s',
-//   },
-//   /* order summary */
-//   summarySection: {
-//     background: '#201f1f',
-//     borderRadius: '20px',
-//     margin: '8px 16px',
-//     padding: '24px',
-//   },
-//   summaryTitle: {
-//     fontSize: '1rem',
-//     fontWeight: 700,
-//     color: '#e5e2e1',
-//     margin: '0 0 20px',
-//   },
-//   summaryRow: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     marginBottom: 14,
-//   },
-//   summaryLabel: {
-//     fontSize: '0.85rem',
-//     color: '#d4c5ab',
-//     fontWeight: 500,
-//   },
-//   summaryValue: {
-//     fontSize: '0.85rem',
-//     color: '#e5e2e1',
-//     fontWeight: 600,
-//   },
-//   summaryDiscount: {
-//     fontSize: '0.85rem',
-//     color: '#00daf8',
-//     fontWeight: 600,
-//   },
-//   summaryFree: {
-//     fontSize: '0.85rem',
-//     color: '#00daf8',
-//     fontWeight: 700,
-//   },
-//   summaryDivider: {
-//     height: 4,
-//     background: '#131313',
-//     borderRadius: 4,
-//     margin: '16px 0',
-//   },
-//   summaryTotal: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     marginTop: 4,
-//   },
-//   totalLabel: {
-//     fontSize: '1rem',
-//     fontWeight: 700,
-//     color: '#e5e2e1',
-//   },
-//   totalValue: {
-//     fontSize: '1.2rem',
-//     fontWeight: 800,
-//     color: '#ffe4af',
-//   },
-//   /* promo */
-//   promoSection: {
-//     margin: '8px 16px',
-//     background: '#1c1b1b',
-//     borderRadius: '16px',
-//     padding: '16px 20px',
-//     display: 'flex',
-//     gap: 10,
-//     alignItems: 'center',
-//   },
-//   promoTag: {
-//     fontSize: 18,
-//     flexShrink: 0,
-//   },
-//   promoInput: {
-//     flex: 1,
-//     background: '#0e0e0e',
-//     border: 'none',
-//     borderRadius: '10px',
-//     padding: '10px 14px',
-//     color: '#e5e2e1',
-//     fontSize: '0.85rem',
-//     fontFamily: "'Manrope', sans-serif",
-//     outline: 'none',
-//   },
-//   promoBtn: {
-//     background: 'transparent',
-//     border: '1px solid rgba(156,143,120,0.25)',
-//     borderRadius: '10px',
-//     color: '#ffe4af',
-//     fontFamily: "'Manrope', sans-serif",
-//     fontSize: '0.8rem',
-//     fontWeight: 700,
-//     padding: '10px 16px',
-//     cursor: 'pointer',
-//     whiteSpace: 'nowrap',
-//     transition: 'background 0.2s',
-//     letterSpacing: '0.04em',
-//   },
-//   /* checkout */
-//   checkoutBar: {
-//     position: 'fixed',
-//     bottom: 0,
-//     left: 0,
-//     right: 0,
-//     padding: '16px 20px 28px',
-//     background: 'rgba(19,19,19,0.85)',
-//     backdropFilter: 'blur(20px)',
-//     WebkitBackdropFilter: 'blur(20px)',
-//   },
-//   checkoutBtn: {
-//     width: '100%',
-//     background: 'linear-gradient(135deg, #fabd00 0%, #ffe4af 100%)',
-//     color: '#3f2e00',
-//     border: 'none',
-//     borderRadius: '14px',
-//     padding: '16px 24px',
-//     fontSize: '1rem',
-//     fontWeight: 800,
-//     fontFamily: "'Manrope', sans-serif",
-//     cursor: 'pointer',
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'space-between',
-//     boxShadow: '0 8px 32px 0 rgba(250,189,0,0.25)',
-//     transition: 'transform 0.15s, box-shadow 0.2s',
-//     letterSpacing: '-0.01em',
-//   },
-//   checkoutTotal: {
-//     fontSize: '1rem',
-//     fontWeight: 800,
-//     color: '#3f2e00',
-//   },
-//   /* empty state */
-//   emptyWrapper: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     minHeight: '70vh',
-//     padding: '40px 32px',
-//     textAlign: 'center',
-//   },
-//   emptyIcon: {
-//     fontSize: 72,
-//     marginBottom: 24,
-//     opacity: 0.7,
-//   },
-//   emptyTitle: {
-//     fontSize: '1.4rem',
-//     fontWeight: 800,
-//     color: '#e5e2e1',
-//     margin: '0 0 10px',
-//     letterSpacing: '-0.01em',
-//   },
-//   emptySubtitle: {
-//     fontSize: '0.9rem',
-//     color: '#d4c5ab',
-//     margin: '0 0 32px',
-//     lineHeight: 1.6,
-//   },
-//   shopBtn: {
-//     background: 'transparent',
-//     border: '1px solid rgba(156,143,120,0.3)',
-//     borderRadius: '12px',
-//     color: '#ffe4af',
-//     fontFamily: "'Manrope', sans-serif",
-//     fontSize: '0.95rem',
-//     fontWeight: 700,
-//     padding: '14px 32px',
-//     cursor: 'pointer',
-//     letterSpacing: '0.02em',
-//     transition: 'background 0.2s',
-//   },
-//   /* loading */
-//   loadingWrapper: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     minHeight: '70vh',
-//     gap: 16,
-//   },
-//   spinner: {
-//     width: 40,
-//     height: 40,
-//     border: '3px solid #2a2a2a',
-//     borderTop: '3px solid #ffc107',
-//     borderRadius: '50%',
-//     animation: 'spin 0.8s linear infinite',
-//   },
-// }
-
-// /* ─── CartItemCard ────────────────────────────────────────────────────────── */
-// function CartItemCard({ item }) {
-//   const { product, quantity, price, variant } = item
-//   const imageUrl = product?.images?.[0]?.url
-//   const variantPrice = product?.variants?.find(v => v._id === variant)?.price?.amount
-//   const displayPrice = variantPrice ?? price?.amount ?? product?.price?.amount
-//   const originalPrice = product?.price?.amount
-//   const showDiscount = originalPrice && displayPrice && displayPrice < originalPrice
-
-//   return (
-//     <div style={styles.cartCard}>
-//       {/* trash icon */}
-//       <button style={styles.deleteBtn} title="Remove item">🗑</button>
-
-//       {/* image */}
-//       {imageUrl ? (
-//         <img
-//           src={imageUrl}
-//           alt={product?.title}
-//           style={styles.productImg}
-//           onError={e => { e.target.style.display = 'none' }}
-//         />
-//       ) : (
-//         <div style={styles.productImgFallback}>👔</div>
-//       )}
-
-//       {/* info */}
-//       <div style={styles.cardInfo}>
-//         <p style={styles.productName}>{product?.title ?? 'Unknown Product'}</p>
-//         <p style={styles.productDesc}>{product?.description ?? ''}</p>
-
-//         <span style={styles.variantChip}>Variant · {quantity} pcs</span>
-
-//         <div style={styles.priceRow}>
-//           <span style={styles.priceMain}>
-//             ₹{(displayPrice * quantity).toLocaleString('en-IN')}
-//           </span>
-//           {showDiscount && (
-//             <span style={styles.priceOriginal}>
-//               ₹{(originalPrice * quantity).toLocaleString('en-IN')}
-//             </span>
-//           )}
-//         </div>
-
-//         {/* quantity stepper (display only — hook can be wired) */}
-//         <div style={styles.quantityStepper}>
-//           <button style={styles.stepperBtn}>−</button>
-//           <span style={styles.stepperCount}>{quantity}</span>
-//           <button style={styles.stepperBtn}>+</button>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-
-// /* ─── OrderSummary ────────────────────────────────────────────────────────── */
-// function OrderSummary({ cartItems }) {
-//   const mrpTotal = cartItems.reduce((sum, item) => {
-//     const originalPrice = item.product?.price?.amount ?? 0
-//     return sum + originalPrice * item.quantity
-//   }, 0)
-
-//   const discountedTotal = cartItems.reduce((sum, item) => {
-//     const variantPrice = item.product?.variants?.find(v => v._id === item.variant)?.price?.amount
-//     const price = variantPrice ?? item.price?.amount ?? item.product?.price?.amount ?? 0
-//     return sum + price * item.quantity
-//   }, 0)
-
-//   const discount = mrpTotal - discountedTotal
-
-//   return (
-//     <div style={styles.summarySection}>
-//       <p style={styles.summaryTitle}>Order Summary</p>
-
-//       <div style={styles.summaryRow}>
-//         <span style={styles.summaryLabel}>MRP Total</span>
-//         <span style={styles.summaryValue}>₹{mrpTotal.toLocaleString('en-IN')}</span>
-//       </div>
-
-//       {discount > 0 && (
-//         <div style={styles.summaryRow}>
-//           <span style={styles.summaryLabel}>Discount</span>
-//           <span style={styles.summaryDiscount}>−₹{discount.toLocaleString('en-IN')}</span>
-//         </div>
-//       )}
-
-//       <div style={styles.summaryRow}>
-//         <span style={styles.summaryLabel}>Delivery</span>
-//         <span style={styles.summaryFree}>FREE</span>
-//       </div>
-
-//       <div style={styles.summaryDivider} />
-
-//       <div style={styles.summaryTotal}>
-//         <span style={styles.totalLabel}>Total Payable</span>
-//         <span style={styles.totalValue}>₹{discountedTotal.toLocaleString('en-IN')}</span>
-//       </div>
-//     </div>
-//   )
-// }
-
-// /* ─── PromoCode ───────────────────────────────────────────────────────────── */
-// function PromoCode() {
-//   const [code, setCode] = useState('')
-
-//   return (
-//     <div style={styles.promoSection}>
-//       <span style={styles.promoTag}>🏷️</span>
-//       <input
-//         style={styles.promoInput}
-//         placeholder="Enter promo code"
-//         value={code}
-//         onChange={e => setCode(e.target.value)}
-//       />
-//       <button style={styles.promoBtn}>Apply</button>
-//     </div>
-//   )
-// }
-
-// /* ─── EmptyCart ───────────────────────────────────────────────────────────── */
-// function EmptyCart({ onShop }) {
-//   return (
-//     <div style={styles.emptyWrapper}>
-//       <div style={styles.emptyIcon}>🛍️</div>
-//       <h2 style={styles.emptyTitle}>Your cart is empty</h2>
-//       <p style={styles.emptySubtitle}>
-//         Looks like you haven't added<br />anything to your cart yet.
-//       </p>
-//       <button
-//         style={styles.shopBtn}
-//         onClick={onShop}
-//         onMouseEnter={e => e.currentTarget.style.background = '#1c1b1b'}
-//         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-//       >
-//         Start Shopping
-//       </button>
-//     </div>
-//   )
-// }
-
-// /* ─── Main Cart Page ──────────────────────────────────────────────────────── */
-// const Cart = () => {
-//   const cartItems = useSelector(state => state.cart.items)
-//   const { handleGetCart } = useCart()
-//   const navigate = useNavigate()
-//   const [loading, setLoading] = useState(true)
-
-//   useEffect(() => {
-//     // inject keyframes for spinner
-//     if (!document.getElementById('cart-spin-style')) {
-//       const s = document.createElement('style')
-//       s.id = 'cart-spin-style'
-//       s.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`
-//       document.head.appendChild(s)
-//     }
-
-//     async function load() {
-//       try {
-//         await handleGetCart()
-//       } finally {
-//         setLoading(false)
-//       }
-//     }
-//     load()
-//   }, [])
-
-//   /* compute totals for CTA */
-//   const checkoutTotal = cartItems.reduce((sum, item) => {
-//     const variantPrice = item.product?.variants?.find(v => v._id === item.variant)?.price?.amount
-//     const price = variantPrice ?? item.price?.amount ?? item.product?.price?.amount ?? 0
-//     return sum + price * item.quantity
-//   }, 0)
-
-//   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
-
-//   return (
-//     <div style={styles.page}>
-//       {/* ── Header ── */}
-//       <header style={styles.header}>
-//         <button
-//           style={styles.backBtn}
-//           onClick={() => navigate(-1)}
-//           onMouseEnter={e => e.currentTarget.style.background = '#353534'}
-//           onMouseLeave={e => e.currentTarget.style.background = '#2a2a2a'}
-//         >
-//           ←
-//         </button>
-//         <h1 style={styles.headerTitle}>My Cart</h1>
-//         <span style={styles.badge}>
-//           {totalItems} {totalItems === 1 ? 'item' : 'items'}
-//         </span>
-//       </header>
-
-//       {/* ── Body ── */}
-//       {loading ? (
-//         <div style={styles.loadingWrapper}>
-//           <div style={styles.spinner} />
-//           <span style={{ color: '#d4c5ab', fontSize: '0.85rem' }}>Loading your cart…</span>
-//         </div>
-//       ) : cartItems.length === 0 ? (
-//         <EmptyCart onShop={() => navigate('/')} />
-//       ) : (
-//         <>
-//           {/* Cart Items */}
-//           <div style={styles.section}>
-//             <p style={styles.sectionTitle}>
-//               {cartItems.length} {cartItems.length === 1 ? 'Product' : 'Products'}
-//             </p>
-//             {cartItems.map(item => (
-//               <CartItemCard key={item._id} item={item} />
-//             ))}
-//           </div>
-
-//           {/* Promo Code */}
-//           <PromoCode />
-
-//           {/* Order Summary */}
-//           <div style={styles.section}>
-//             <p style={styles.sectionTitle}>Price Details</p>
-//             <OrderSummary cartItems={cartItems} />
-//           </div>
-//         </>
-//       )}
-
-//       {/* ── Sticky Checkout Bar ── */}
-//       {!loading && cartItems.length > 0 && (
-//         <div style={styles.checkoutBar}>
-//           <button
-//             style={styles.checkoutBtn}
-//             onMouseEnter={e => {
-//               e.currentTarget.style.transform = 'translateY(-2px)'
-//               e.currentTarget.style.boxShadow = '0 12px 40px 0 rgba(250,189,0,0.35)'
-//             }}
-//             onMouseLeave={e => {
-//               e.currentTarget.style.transform = 'translateY(0)'
-//               e.currentTarget.style.boxShadow = '0 8px 32px 0 rgba(250,189,0,0.25)'
-//             }}
-//           >
-//             <span>Proceed to Checkout</span>
-//             <span style={styles.checkoutTotal}>₹{checkoutTotal.toLocaleString('en-IN')}</span>
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   )
-// }
-
-// export default Cart
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -1157,3 +500,143 @@ const Cart = () => {
 }
 
 export default Cart
+
+
+
+
+
+
+
+// import React, { useEffect } from 'react'
+// import { useSelector, useDispatch } from 'react-redux'
+// import { Link, useNavigate } from 'react-router'
+
+// import {
+//     incrementItemQuantity,
+//     decrementItemQuantity,
+//     removeItem
+// } from '../state/cart.slice'
+
+// const Cart = () => {
+
+//     const cartItems = useSelector(state => state.cart.items)
+//     const dispatch = useDispatch()
+//     const navigate = useNavigate()
+
+//     useEffect(() => {
+//         // optional: agar backend se load karna ho
+//     }, [])
+
+//     /* ─── Helpers ─── */
+//     const formatCurrency = (amount, currency = 'INR') =>
+//         `${currency} ${Number(amount).toLocaleString('en-IN')}`
+
+//     const subtotal = cartItems?.reduce((sum, item) => {
+//         return sum + (item.product?.price || 0) * (item.quantity || 1)
+//     }, 0)
+
+//     /* ─── Empty Cart ─── */
+//     if (!cartItems?.length) {
+//         return (
+//             <div className="min-h-screen flex flex-col items-center justify-center">
+//                 <h1>Your Cart is Empty</h1>
+//                 <Link to="/">Go Shopping</Link>
+//             </div>
+//         )
+//     }
+
+//     return (
+//         <div className="p-6">
+
+//             <h1 className="text-2xl mb-6">Your Cart</h1>
+
+//             {cartItems.map(item => {
+//                 const productId = item.product._id
+//                 const variantId = item.variant
+//                 const qty = item.quantity || 1
+
+//                 return (
+//                     <div
+//                         key={productId + variantId}
+//                         className="flex items-center justify-between border p-4 mb-4"
+//                     >
+//                         <div>
+//                             <h3>{item.product.name}</h3>
+//                             <p>₹ {item.product.price}</p>
+//                         </div>
+
+//                         {/* Quantity Controls */}
+//                         <div className="flex items-center gap-3">
+
+//                             {/* ➖ */}
+//                             <button
+//                                 onClick={() =>
+//                                     dispatch(decrementItemQuantity({
+//                                         productId,
+//                                         variantId
+//                                     }))
+//                                 }
+//                                 className="px-3 py-1 border"
+//                             >
+//                                 -
+//                             </button>
+
+//                             <span>{qty}</span>
+
+//                             {/* ➕ */}
+//                             <button
+//                                 onClick={() =>
+//                                     dispatch(incrementItemQuantity({
+//                                         productId,
+//                                         variantId
+//                                     }))
+//                                 }
+//                                 className="px-3 py-1 border"
+//                             >
+//                                 +
+//                             </button>
+//                         </div>
+
+//                         {/* Remove */}
+//                         <button
+//                             onClick={() =>
+//                                 dispatch(removeItem({
+//                                     productId,
+//                                     variantId
+//                                 }))
+//                             }
+//                             className="text-red-500"
+//                         >
+//                             Remove
+//                         </button>
+//                     </div>
+//                 )
+//             })}
+
+//             {/* Total */}
+//             <div className="mt-6 text-xl">
+//                 Total: ₹ {subtotal}
+//             </div>
+
+//             {/* Buttons */}
+//             <div className="mt-4 flex gap-4">
+//                 <button
+//                     className="bg-black text-white px-4 py-2"
+//                     onClick={() => alert("Proceed to checkout")}
+//                 >
+//                     Checkout
+//                 </button>
+
+//                 <button
+//                     className="border px-4 py-2"
+//                     onClick={() => navigate('/')}
+//                 >
+//                     Continue Shopping
+//                 </button>
+//             </div>
+
+//         </div>
+//     )
+// }
+
+// export default Cart
