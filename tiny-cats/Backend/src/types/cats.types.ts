@@ -1,6 +1,6 @@
 import  type  { Document } from "mongoose";
 
-export interface Icat extends Document {
+export interface ICat extends Document {
     name: string; 
     breed: string;
     description: string;
