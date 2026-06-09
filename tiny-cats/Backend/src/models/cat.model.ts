@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import type { ICat} from "../types/cats.types.ts"
 
-export let catSchema = new mongoose.Schema<ICat>({
-    name: {
+export let catSchema = new mongoose.Schema<ICat>(
+   {
+     name: {
         type: String,
         required: true,      
     },
@@ -24,12 +25,13 @@ export let catSchema = new mongoose.Schema<ICat>({
     },
     lifeSpan: {
         type: Number,
-        required: true
+        default: 1,
     },
     energyLevel: {
         type: String,
-        required: true
+        required: true,
     },
+   
     image: {
         type: String,
         required: true
@@ -37,5 +39,14 @@ export let catSchema = new mongoose.Schema<ICat>({
     color: {
         type: String,
         required: true
-    }
-})
+    },
+   },
+   {
+    timestamps: true,
+   }
+   
+);
+
+let CatModel = mongoose.model("Cat", catSchema);
+
+export default CatModel;
