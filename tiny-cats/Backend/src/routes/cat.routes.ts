@@ -1,12 +1,12 @@
 import express from "express";
-import { createCatController } from "../controller/cat.controller.ts";
+import { createCatController, getAllCatsController, getSingleCatController, recommendedCatsController, searchCatController } from "../controller/cat.controller.ts";
 
 const router = express.Router();
 
 router.post("/create", createCatController);
-// router.get("/search/all");
-// router.get("/");
-// router.get("/:id");
-// router.put("/recommend");
+router.get("/search/all", searchCatController);
+router.get("/", getAllCatsController);
+router.get("/:id", getSingleCatController);
+ router.post("/recommend", recommendedCatsController);
 
 export default router;
