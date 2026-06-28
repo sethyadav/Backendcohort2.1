@@ -1,15 +1,4 @@
-/**
- * battleService.js
- *
- * Calls your LangGraph backend to get:
- *   - solution_1  (string, markdown)
- *   - solution_2  (string, markdown)
- *   - judge       { solution_1_score, solution_2_score,
- *                   solution_1_reasoning, solution_2_reasoning }
- *
- * If no backend is available, falls back to rich mock data so the UI
- * is fully demonstrable without a running server.
- */
+
 
 const API_BASE = import.meta.env.VITE_API_URL || ''
 
